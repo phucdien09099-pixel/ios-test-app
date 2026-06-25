@@ -1,0 +1,38 @@
+workflows:
+  ios-test-build:
+    name: "Tauri iOS - test build (chan doan)"
+    instance_type: mac_mini_m2
+    max_build_duration: 30
+    environment:
+      node: 20.11.0
+
+    scripts:
+      - name: Cai Rust toolchain + target iOS
+        script: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+          source "$HOME/.cargo/env"
+          rustup target add aarch64-apple-ios aarch64-apple-ios-sim
+
+      - name: Cai dependencies frontend (Next.js)
+        script: npm install
+
+      - name: Build frontend tinh (next export)
+        script: npm run build
+
+      - name: Tao Xcode project cho iOS (tauri ios init)
+        script: |
+          source "$HOME/.cargo/env"
+          npx tauri ios init --ci
+
+      - name: Thu build iOS - day la buoc CHAN DOAN
+        script: |
+          source "$HOME/.cargo/env"
+          # Lan dau chay buoc nay rat co kha nang loi o phan code signing,
+          # vi day la van de chinh chua giai quyet (xem README.md).
+          # Dung "|| true" de build khong fail cung, con log/artifact de doc.
+          npx tauri ios build --debug --verbose || true
+
+    artifacts:
+      - src-tauri/gen/apple/build/**/*.ipa
+      - src-tauri/gen/apple/build/**/*.app
+      - src-tauri/gen/apple/**/*.xcresult/**
