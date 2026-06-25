@@ -25,31 +25,18 @@ workflows:
           source "$HOME/.cargo/env"
           npx tauri ios init --ci
 
-      - name: Thu build iOS KHONG SIGNING
+      - name: Build iOS bang Tauri
         script: |
           source "$HOME/.cargo/env"
 
-          cd src-tauri/gen/apple
+          echo "===== TAURI VERSION ====="
+          npx tauri --version
 
-          xcodebuild \
-            -project app.xcodeproj \
-            -scheme app_iOS \
-            -configuration Debug \
-            -destination generic/platform=iOS \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY="" \
-            build || true
+          echo "===== IOS HELP ====="
+          npx tauri ios --help || true
 
-          echo "===== TIM SAN PHAM BUILD ====="
-          find ~/Library/Developer/Xcode/DerivedData -name "*.app" 2>/dev/null || true
-          find ~/Library/Developer/Xcode/DerivedData -name "*.ipa" 2>/dev/null || true
-
-          echo "===== NOI DUNG APP ====="
-          find ~/Library/Developer/Xcode/DerivedData -name "*.app" -type d | while read app; do
-            echo "APP FOUND: $app"
-            ls -la "$app"
-          done
+          echo "===== BUILD IOS ====="
+          npx tauri ios build --debug --ci
 
     artifacts:
       - /Users/builder/Library/Developer/Xcode/DerivedData/**/*.app
