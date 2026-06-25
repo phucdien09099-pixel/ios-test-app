@@ -45,6 +45,12 @@ workflows:
           find ~/Library/Developer/Xcode/DerivedData -name "*.app" 2>/dev/null || true
           find ~/Library/Developer/Xcode/DerivedData -name "*.ipa" 2>/dev/null || true
 
+          echo "===== NOI DUNG APP ====="
+          find ~/Library/Developer/Xcode/DerivedData -name "*.app" -type d | while read app; do
+            echo "APP FOUND: $app"
+            ls -la "$app"
+          done
+
     artifacts:
       - /Users/builder/Library/Developer/Xcode/DerivedData/**/*.app
       - /Users/builder/Library/Developer/Xcode/DerivedData/**/*.ipa
