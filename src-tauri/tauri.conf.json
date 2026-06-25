@@ -4,10 +4,8 @@
   "version": "0.1.0",
   "identifier": "com.diem.iostest",
   "build": {
-    "frontendDist": "../out",
-    "devUrl": "http://localhost:3000",
-    "beforeDevCommand": "npm run dev",
-    "beforeBuildCommand": "npm run build"
+  "frontendDist": "../out",
+  "beforeBuildCommand": "npm run build"
   },
   "app": {
     "windows": [
